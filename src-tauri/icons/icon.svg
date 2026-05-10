@@ -1,0 +1,56 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
+  <defs>
+    <linearGradient id="grad1" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#3B82F6;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#8B5CF6;stop-opacity:1" />
+    </linearGradient>
+    <linearGradient id="grad2" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#60A5FA;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#A78BFA;stop-opacity:1" />
+    </linearGradient>
+  </defs>
+  
+  <!-- Background circle -->
+  <circle cx="256" cy="256" r="240" fill="url(#grad1)"/>
+  
+  <!-- Inner shadow circle -->
+  <circle cx="256" cy="256" r="220" fill="none" stroke="rgba(255,255,255,0.1)" stroke-width="2"/>
+  
+  <!-- Git branch icon -->
+  <g transform="translate(180, 120)">
+    <!-- Main branch line -->
+    <line x1="76" y1="0" x2="76" y2="280" stroke="white" stroke-width="8" stroke-linecap="round"/>
+    
+    <!-- Node 1 (top) -->
+    <circle cx="76" cy="40" r="20" fill="white"/>
+    <circle cx="76" cy="40" r="10" fill="url(#grad1)"/>
+    
+    <!-- Node 2 (middle) -->
+    <circle cx="76" cy="140" r="20" fill="white"/>
+    <circle cx="76" cy="140" r="10" fill="url(#grad1)"/>
+    
+    <!-- Branch line -->
+    <path d="M 76 140 Q 120 140 120 180 L 120 220" stroke="white" stroke-width="8" fill="none" stroke-linecap="round"/>
+    
+    <!-- Node 3 (branch) -->
+    <circle cx="120" cy="240" r="20" fill="white"/>
+    <circle cx="120" cy="240" r="10" fill="url(#grad1)"/>
+  </g>
+  
+  <!-- Pulse/heartbeat line -->
+  <g transform="translate(80, 280)">
+    <polyline points="0,40 40,40 60,10 80,70 100,20 120,50 140,40 180,40 200,40 220,10 240,70 260,20 280,50 300,40 350,40" 
+              stroke="white" stroke-width="10" fill="none" stroke-linecap="round" stroke-linejoin="round" opacity="0.9"/>
+  </g>
+  
+  <!-- AI sparkle dots -->
+  <circle cx="380" cy="120" r="8" fill="white" opacity="0.8"/>
+  <circle cx="400" cy="100" r="5" fill="white" opacity="0.6"/>
+  <circle cx="390" cy="140" r="6" fill="white" opacity="0.7"/>
+  
+  <!-- Decorative dots -->
+  <circle cx="100" cy="150" r="4" fill="white" opacity="0.3"/>
+  <circle cx="120" cy="170" r="3" fill="white" opacity="0.2"/>
+  <circle cx="400" cy="350" r="4" fill="white" opacity="0.3"/>
+  <circle cx="380" cy="370" r="3" fill="white" opacity="0.2"/>
+</svg>
