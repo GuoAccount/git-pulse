@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback } from 'react';
+import { useState, useEffect, useCallback, useRef } from 'react';
 import { open } from '@tauri-apps/plugin-dialog';
 import { Header } from './components/Header';
 import { WorkspaceSelector } from './components/WorkspaceSelector';
@@ -29,7 +29,10 @@ import {
 
 function App() {
   // State
-  const [workspacePath, setWorkspacePath] = useState<string | null>(null);
+  const [workspacePath, setWorkspacePath] = useState<string | null>(() => {
+    const saved = localStorage.getItem('workspacePath');
+    return saved || null;
+  });
   const [repos, setRepos] = useState<GitRepo[]>([]);
   const [selectedRepos, setSelectedRepos] = useState<string[]>([]);
   const [dateRange, setDateRange] = useState({
@@ -37,7 +40,10 @@ function App() {
     to: new Date(),
   });
   const [authors, setAuthors] = useState<string[]>([]);
-  const [selectedAuthors, setSelectedAuthors] = useState<string[]>([]);
+  const [selectedAuthors, setSelectedAuthors] = useState<string[]>(() => {
+    const saved = localStorage.getItem('selectedAuthors');
+    return saved ? JSON.parse(saved) : [];
+  });
   const [commits, setCommits] = useState<GitCommitType[]>([]);
   const [aiReport, setAiReport] = useState<string | null>(null);
   const [aiConfig, setAiConfig] = useState<AIConfig>(() => {
@@ -48,6 +54,24 @@ function App() {
   const [isGenerating, setIsGenerating] = useState(false);
   const [activeTab, setActiveTab] = useState<'log' | 'report'>('log');
   const [isSettingsOpen, setIsSettingsOpen] = useState(false);
+
+  // Save workspacePath to localStorage
+  useEffect(() => {
+    if (workspacePath) {
+      localStorage.setItem('workspacePath', workspacePath);
+    } else {
+      localStorage.removeItem('workspacePath');
+    }
+  }, [workspacePath]);
+
+  // Save selectedAuthors to localStorage
+  useEffect(() => {
+    if (selectedAuthors.length > 0) {
+      localStorage.setItem('selectedAuthors', JSON.stringify(selectedAuthors));
+    } else {
+      localStorage.removeItem('selectedAuthors');
+    }
+  }, [selectedAuthors]);
 
   // Save AI config to localStorage
   useEffect(() => {
@@ -104,6 +128,15 @@ function App() {
     }
   };
 
+  // Auto-load workspace on mount if saved
+  const hasInitialized = useRef(false);
+  useEffect(() => {
+    if (workspacePath && !hasInitialized.current) {
+      hasInitialized.current = true;
+      handleRefresh();
+    }
+  }, [workspacePath]); // eslint-disable-line react-hooks/exhaustive-deps
+
   // Toggle repo selection
   const handleToggleRepo = (path: string) => {
     setSelectedRepos((prev) =>
@@ -152,7 +185,13 @@ function App() {
       // Get authors first
       const repoAuthors = await getRepoAuthors(selectedRepos, since, until);
       setAuthors(repoAuthors);
-      setSelectedAuthors(repoAuthors);
+      
+      // Preserve selected authors if they exist in new authors list
+      setSelectedAuthors((prev) => {
+        if (prev.length === 0) return repoAuthors;
+        const validAuthors = prev.filter((author) => repoAuthors.includes(author));
+        return validAuthors.length > 0 ? validAuthors : repoAuthors;
+      });
 
       // Get commits
       const logCommits = await getGitLog({

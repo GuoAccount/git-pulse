@@ -15,13 +15,13 @@ export function WorkspaceSelector({
   isLoading,
 }: WorkspaceSelectorProps) {
   return (
-    <div className="flex items-center gap-3">
+    <div className="flex items-center gap-3 min-w-0">
       <Button
         variant="secondary"
         onClick={onSelectWorkspace}
-        className="flex-1 justify-start"
+        className="flex-1 min-w-0 justify-start overflow-hidden"
       >
-        <FolderOpen className="h-4 w-4" />
+        <FolderOpen className="h-4 w-4 flex-shrink-0" />
         {workspacePath ? (
           <span className="truncate">{workspacePath}</span>
         ) : (
@@ -34,6 +34,7 @@ export function WorkspaceSelector({
           size="sm"
           onClick={onRefresh}
           disabled={isLoading}
+          className="flex-shrink-0"
         >
           <RefreshCw className={`h-4 w-4 ${isLoading ? 'animate-spin' : ''}`} />
         </Button>
